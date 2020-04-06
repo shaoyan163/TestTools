@@ -9,6 +9,8 @@
 """
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
+from Interfaces.models import Interfaces
 from tools.models import Projects
 
 
@@ -61,3 +63,23 @@ class ProjectModelSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = "__all__"
+
+
+class ProjectNameSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ("id", "name")
+
+
+class InterfacesNameSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Interfaces
+        fields = ("id", "name", "tester")
+
+
+class InterfacesByProjectIdSerialzer(serializers.ModelSerializer):
+    interfaces_set = InterfacesNameSerialzer(read_only=True, many=True)
+
+    class Meta:
+        model = Projects
+        fields = ("id", 'interfaces_set')
