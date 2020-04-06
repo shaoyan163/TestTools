@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("tools.urls")),
+    path('docs/', include_docs_urls(title="测试平台接口文档", description="这是一个接口测试平台")),
 ]

@@ -50,6 +50,8 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # LimitOffsetPagination 分页风格
     # 'PAGE_SIZE': 3,
     'DEFAULT_PAGINATION_CLASS': "utils.pagination.PageNumberPaginationManual",
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"
+
 }
 
 MIDDLEWARE = [

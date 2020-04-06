@@ -18,7 +18,7 @@ from rest_framework import routers
 from tools import views
 
 router = routers.SimpleRouter()
-router = routers.DefaultRouter()
+# router = routers.DefaultRouter()
 router.register(r'tools', views.ProjectsViewSet)
 
 urlpatterns = [
