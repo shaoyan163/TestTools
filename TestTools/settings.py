@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,9 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "django_filters",
+    "drf_yasg",
     "tools",
-    "Interfaces"
+    "Interfaces",
+    "user"
 ]
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_AUTH_HEADER_PREFIX': 'B',
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+        'utils.jwt_handler.jwt_response_payload_handler',
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (  # 默认响应渲染类
@@ -50,7 +59,11 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # LimitOffsetPagination 分页风格
     # 'PAGE_SIZE': 3,
     'DEFAULT_PAGINATION_CLASS': "utils.pagination.PageNumberPaginationManual",
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+                                       'rest_framework.authentication.SessionAuthentication',
+                                       'rest_framework.authentication.BasicAuthentication',
+                                       ),
 
 }
 
@@ -125,6 +138,75 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] - %(message)s'}
+        # 日志格式
+    },
+    'filters': {
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'maxBytes': 1024 * 1024 * 50,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'request_handler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/run.log'),
+            'maxBytes': 1024 * 1024 * 50,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'scprits_handler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/run.log'),
+            'maxBytes': 1024 * 1024 * 100,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['default', 'console'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'FasterRunner.app': {
+            'handlers': ['default', 'console'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'FasterRunner': {
+            'handlers': ['scprits_handler', 'console'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}
 
 LANGUAGE_CODE = 'zh-hans'  # admin后台显示中文
 

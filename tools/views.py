@@ -7,7 +7,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import View
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, filters, mixins, response
+from rest_framework import status, filters, mixins, response, permissions
 from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,11 +31,25 @@ class IndexView(View):
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
+    """
+    list:
+    获取所有项目信息
+    update:
+    修改项目
+    create:
+    创建项目
+    destroy:
+    删除项目
+    retrieve:
+    查看项目具体信息
+    """
     queryset = Projects.objects.all().order_by("id")
     serializer_class = ProjectModelSerialzer
     ordering_fields = ["name", "leader", "id"]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "leader", "tester"]
+    permission_classes = [permissions.IsAuthenticated]
+
 
     @action(methods=["get"], detail=False)
     def names(self, request, *args, **kwargs):
