@@ -17,11 +17,13 @@ from django.urls import path
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 
-from tools import views
 
-router = routers.SimpleRouter()
-router.register(r'user', views.ProjectsViewSet)
+
+# router = routers.SimpleRouter()
+# router.register(r'user', views.ProjectsViewSet)
+from user import views
 
 urlpatterns = [
-    path("login/", obtain_jwt_token)
+    path("login/", obtain_jwt_token),
+    path("register/", views.RegisterView.as_view())
 ]
