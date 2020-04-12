@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import datetime
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -39,12 +41,18 @@ INSTALLED_APPS = [
     'rest_framework',
     "django_filters",
     "drf_yasg",
-    "tools",
-    "Interfaces",
-    "user"
+    "interfaces",
+    "user",
+    "projects",
+    "debugtalks",
+    "configures",
+    "envs",
+    "reports",
+    "testcases",
+    "testsuites",
 ]
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
     'JWT_AUTH_HEADER_PREFIX': 'B',
     'JWT_RESPONSE_PAYLOAD_HANDLER':
         'utils.jwt_handler.jwt_response_payload_handler',
@@ -109,7 +117,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
+        'NAME': 'test1',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
